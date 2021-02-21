@@ -17,7 +17,7 @@ public class Controller {
         readFile(file);
         pizzaAllocated = new boolean[M];
         allocatePizzas();
-        score();
+        totalScore();
         //graph.testGraph();
         Pathfinder.testPath(graph);
     }
@@ -59,7 +59,17 @@ public class Controller {
         HashSet set = new HashSet<String>();
     }
 
-    private void score() {
-        //teams.get()
+    private int totalScore() { // Untested and untried
+        Iterable<String> team_keys = teams.keySet();
+        int score = 0;
+        for(String k : team_keys) {
+            HashSet<String> pizzas = teams.get(k);
+            HashSet<String> ingredients = new HashSet<String>();
+            for(String p : pizzas) {
+                ingredients.addAll((Collection<? extends String>) graph.adjacentTo(p));
+            }
+            score += ingredients.size()^2;
+        }
+        return score;
     }
 }
