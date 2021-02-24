@@ -14,10 +14,11 @@ public class Controller {
     private boolean[] pizzaAllocated;
 
     public Controller(String file) throws FileNotFoundException {
-        readFile(file);
+        //graph = fileToGraph(file);
+        Matrix matrix = new Matrix(file);
         pizzaAllocated = new boolean[M];
         allocatePizzas();
-        totalScore();
+        //totalScore();
         //graph.testGraph();
         Pathfinder.testPath(graph);
     }
@@ -33,7 +34,7 @@ public class Controller {
 
     }
 
-    public void readFile(String f) throws FileNotFoundException {
+    public Graph fileToGraph(String f) throws FileNotFoundException {
         Scanner scFile = new Scanner(new File(f));
 
         Scanner firstLine = new Scanner(scFile.nextLine());
@@ -42,7 +43,7 @@ public class Controller {
         this.T3 = firstLine.nextInt();
         this.T4 = firstLine.nextInt();
 
-        this.graph = new Graph();
+        Graph graph = new Graph();
         for(int pizzaNum = 0; pizzaNum<this.M; pizzaNum++) {
             System.out.printf("\r Processing pizza %s", pizzaNum);
             Scanner line = new Scanner(scFile.nextLine());
@@ -51,6 +52,7 @@ public class Controller {
                 graph.addEdge(Integer.toString(pizzaNum),line.next());
             }
         }
+        return graph;
     }
 
     public void allocatePizzas(){
