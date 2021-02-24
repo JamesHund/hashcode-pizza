@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import org.ejml.simple.SimpleMatrix;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
 public class Matrix {
-    private boolean[][] array;
+    private SimpleMatrix matrix;
     private HashMap<String,Integer> indices;
 
     public Matrix(String filename) throws FileNotFoundException {
@@ -14,25 +15,13 @@ public class Matrix {
 
         indices = new HashMap<>();
         Timer indexing = new Timer();
-        int arraySize = calculateIndices(filename) + 1;
+        int arraySize = calculateIndices(filename)+ 1;
         System.out.printf("Indexing took %s seconds\n",indexing.getElapsedSeconds());
         System.out.printf("Array size is %s by %s\n",arraySize,arraySize);
         Timer arrayInitialization = new Timer();
-        array = new boolean[arraySize][arraySize];
-        System.out.printf("Array successfully initialized in %s seconds\n",arrayInitialization.getElapsedSeconds());
-
-//        Scanner firstLine = new Scanner(scFile.nextLine());
-//        int numPizzas = firstLine.nextInt();
-//        int currentIndex = numPizzas;
-//        Scanner line;
-//        for(int pizzaNum = 0; pizzaNum<numPizzas; pizzaNum++) {
-//            System.out.printf("\r Processing pizza %s", pizzaNum);
-//            line = new Scanner(scFile.nextLine());
-//            int numIngredients = line.nextInt();
-//            for(int i = 0; i < numIngredients; i++){
-//
-//            }
-//        }
+        matrix = new SimpleMatrix(arraySize, arraySize);
+        System.out.printf("Matrix successfully initialized in %s seconds\n",arrayInitialization.getElapsedSeconds());
+        loadFile(filename);
     }
 
     private int calculateIndices(String filename)throws FileNotFoundException{
@@ -56,13 +45,35 @@ public class Matrix {
         return currentIndex;
     }
 
-    public Matrix booleanSquare(){
-        return this;
+    private void loadFile(String f) throws FileNotFoundException {
+        Scanner scFile = new Scanner(new File(f));
+        Scanner firstLine = new Scanner(scFile.nextLine());
+        int M = firstLine.nextInt();
+        int T2 = firstLine.nextInt();
+        int T3 = firstLine.nextInt();
+        int T4 = firstLine.nextInt();
+        for(int pizzaNum = 0; pizzaNum<M; pizzaNum++) {
+            System.out.printf("\r Processing pizza %s", pizzaNum);
+            Scanner line = new Scanner(scFile.nextLine());
+            int numIngredients = line.nextInt();
+            for(int i = 0; i < numIngredients; i++){
+                String ingredient = line.next();
+                matrix.set(pizzaNum,indices.get(ingredient),1);
+                matrix.set(indices.get(ingredient),pizzaNum,1);
+            }
+        }
+        System.out.println("Done Processing");
     }
 
-    //Same as the boolean square but each new entry shows the number of common entries instead of just 1 or 0
-    public Matrix weightedBooleanSquare(){
-        return this;
+    public SimpleMatrix square(){
+        Timer matrixMult = new Timer();
+        SimpleMatrix m = matrix.mult(matrix);
+        System.out.printf("Matrix multiplied in %s seconds\n",matrixMult.getElapsedSeconds());
+        return m;
+    }
+
+    public void print(){
+        matrix.print();
     }
 
 }

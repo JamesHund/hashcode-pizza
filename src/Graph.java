@@ -4,6 +4,8 @@ import java.util.*;
 
 public class Graph {
 
+    private final boolean DISABLE_GRAPHYNESS = true;
+
     HashMap<String, HashSet<String>> hashmap;
 
     public Graph(){
@@ -18,12 +20,14 @@ public class Graph {
         }else{
             hashmap.get(v).add(w);
         }
-        if(!hashmap.containsKey(w)){
-            HashSet<String> set = new HashSet<>();
-            set.add(v);
-            hashmap.put(w, set);
-        }else{
-            hashmap.get(w).add(v);
+        if (!DISABLE_GRAPHYNESS) {
+            if (!hashmap.containsKey(w)) {
+                HashSet<String> set = new HashSet<>();
+                set.add(v);
+                hashmap.put(w, set);
+            } else {
+                hashmap.get(w).add(v);
+            }
         }
     }
 
@@ -70,6 +74,10 @@ public class Graph {
 
     public boolean hasEdge(String v, String w){
         return hashmap.get(v).contains(w);
+    }
+
+    public Set<String> keySet() {
+        return hashmap.keySet();
     }
 
     public void testGraph(){
