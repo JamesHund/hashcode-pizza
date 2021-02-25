@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.ejml:all:0.30" level="project" />
+    <orderEntry type="library" name="io.jenetics:jenetics:6.2.0" level="project" />
   </component>
 </module>
